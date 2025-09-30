@@ -3,56 +3,99 @@ import { Chessground } from "@lichess-org/chessground";
 
 // Chessground options type based on official documentation
 type ChessgroundOptions = {
+  /** Board orientation (view angle): "white" | "black" */
   orientation?: "white" | "black";
+  /** Turn to play: "white" | "black" */
   turnColor?: "white" | "black";
+  /** Square currently in check (e.g. "a2") or null */
   check?: string | null;
+  /** Squares part of the last move (e.g. ["c3", "c4"]) or null */
   lastMove?: [string, string] | null;
+  /** Square currently selected (e.g. "a1") or null */
   selected?: string | null;
+  /** Display board coordinates as square ::after elements */
   coordinates?: boolean;
+  /** Don't bind events: user cannot move pieces */
   viewOnly?: boolean;
+  /** Don't use square elements (optimization for viewOnly) */
   minimalDom?: boolean;
+  /** Disable browser context menu on board */
   disableContextMenu?: boolean;
+  /** Highlight options */
   highlight?: {
+    /** Add last-move class to squares */
     lastMove?: boolean;
+    /** Add check class to squares */
     check?: boolean;
+    /** Add drag-over class to square when dragging */
     dragOver?: boolean;
   };
+  /** Animation options */
   animation?: {
+    /** Enable piece animations */
     enabled?: boolean;
+    /** Animation duration in ms */
     duration?: number;
   };
+  /** Movable piece options */
   movable?: {
+    /** All moves are valid (board editor) */
     free?: boolean;
+    /** Color that can move: "white" | "black" | "both" | null */
     color?: "white" | "black" | "both" | null;
+    /** Valid moves: {a2: ["a3", "a4"], ...} */
     dests?: Record<string, string[]> | null;
+    /** When a piece is dropped outside: "revert" | "trash" */
     dropOff?: "revert" | "trash";
+    /** Add move-dest class to squares */
     showDests?: boolean;
+    /** Movable events */
     events?: {
+      /** Called after the move has been played */
       after?: (orig: string, dest: string, metadata?: any) => void;
     };
   };
+  /** Premovable piece options */
   premovable?: {
+    /** Allow premoves for color that cannot move */
     enabled?: boolean;
+    /** Add premove-dest class to squares */
     showDests?: boolean;
+    /** Keys of the current saved premove */
     current?: [string, string] | null;
+    /** Premovable events */
     events?: {
+      /** Called after the premove has been set */
       set?: (orig: string, dest: string) => void;
+      /** Called after the premove has been unset */
       unset?: () => void;
     };
   };
+  /** Drag & drop options */
   draggable?: {
+    /** Allow moves & premoves to use drag'n drop */
     enabled?: boolean;
+    /** Minimum distance to initiate drag (px) */
     distance?: number;
+    /** Display big square target (mobile) */
     squareTarget?: boolean;
+    /** Center the piece on cursor at drag start */
     centerPiece?: boolean;
+    /** Show ghost of piece being dragged */
     showGhost?: boolean;
   };
+  /** SVG drawing options */
   drawable?: {
+    /** Enable SVG circle and arrow drawing */
     enabled?: boolean;
   };
+  /** Board events */
   events?: {
+    /** Called after the situation changes on the board */
     change?: () => void;
+    /** Called after a piece has been moved */
     move?: (orig: string, dest: string, capturedPiece?: { color: string; role: string } | null) => void;
+    /** Called when a square is selected */
     select?: (key: string) => void;
   };
 };
