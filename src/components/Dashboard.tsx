@@ -17,13 +17,29 @@ export default function Dashboard() {
 
   const handleConnect = async () => {
     if (!piConfig.ip) return;
-    
+
+    // Validate IPv4 address
+    const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (!ipv4Regex.test(piConfig.ip)) {
+      alert('Please enter a valid IPv4 address.');
+      return;
+    }
+
     setIsConnecting(true);
     try {
-      // Simulate connection attempt - replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setPiConfig(prev => ({ ...prev, connected: true }));
+      // Attempt to connect to Raspberry Pi REST API
+      const response = await fetch(`http://${piConfig.ip}:8080/api/v1/helloworld`);
+      if (!response.ok) {
+        throw new Error('API not reachable');
+      }
+      const data = await response.json();
+      if (data.message && data.message.includes('Chess API is running')) {
+        setPiConfig(prev => ({ ...prev, connected: true }));
+      } else {
+        throw new Error('Unexpected API response');
+      }
     } catch (error) {
+      alert('Failed to connect: ' + error);
       console.error('Failed to connect:', error);
     } finally {
       setIsConnecting(false);
