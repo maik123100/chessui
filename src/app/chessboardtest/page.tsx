@@ -2,14 +2,21 @@
 
 import React, { useState, useRef } from "react";
 import Chessboard from "@/components/Chessboard";
+import { Move } from "chess.js";
 
 export default function ChessboardTest() {
 		const [mode, setMode] = useState<"PLAY" | "ANALYSIS" | "BOARDEDIT">("PLAY");
-		const boardRef = useRef<any>(null);
+		const boardRef = useRef<{
+		getFen: () => string;
+		setFen: (fen: string) => void;
+		reset: () => void;
+		move: (from: string, to: string) => Move | null;
+		getMoves: () => Move[];
+	} | null>(null);
 		const [moveFrom, setMoveFrom] = useState("");
 		const [moveTo, setMoveTo] = useState("");
 		const [fen, setFenState] = useState("");
-		const [moves, setMoves] = useState<any[]>([]);
+		const [moves, setMoves] = useState<Move[]>([]);
 
 		const handleGetFen = () => {
 			if (boardRef.current) setFenState(boardRef.current.getFen());
